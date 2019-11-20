@@ -1,0 +1,37 @@
+000 LOAD M(0F0)	 STOR M(004, DIREITA);			# carrega vet[i] e direciona este endereço para respectivas operações
+001 STOR M(006, ESQUERDA); STOR M(007, DIREITA);
+002 ADD M(0F1);	STOR M(004, ESQUERDA);			# determina vet[i + 1] e direciona este endereço para respectivas operações
+003 STOR M(007, ESQUERDA); STOR M(008, DIREITA);
+004 LOAD M(FF2); SUB M(FF1);
+005 JUMP+ M(006, ESQUERDA); JUMP M(009, ESQUERDA);	# if (vet[i] < vet[i+1])
+006 LOAD M(FF1); STOR M(0FA);				# aux = vet[i]
+007 LOAD M(FF2); STOR M(FF1);				# vet[i] = vet[i+1]
+008 LOAD M(0FA); STOR M(FF2);				# vet[i+1] = aux
+009 LOAD M(0F0); ADD M(0F1);				# aumenta vet[i] em 1
+00A STOR M(0F0); LOAD M(0F4);				
+00B SUB M(0F1); STOR M(0F4);				# diminuí o contador interno
+00C JUMP+ M(000, ESQUERDA); LOAD M(0F6);		# quando o contador interno for <= 0
+00D STOR M(0F4); LOAD M(0F7);				# reset do contador interno
+00E STOR M(0F0); LOAD M(0F5);				# reset do endereço inicial de vet[i]
+00F SUB M(0F1); STOR M(0F5);				# diminuí o contador externo
+010 JUMP+ M(000, ESQUERDA); LOAD M(0F8);
+011 STOR M(014, DIREITA); ADD M(0F1);
+012 STOR M(0F8); LOAD M(0F9);
+013 STOR M(015, ESQUERDA); ADD M(0F1);
+014 STOR M(0F9); LOAD M(FF8);
+015 STOR M(FF9); LOAD M(0EF);
+016 SUB M(0F1); STOR M(0EF);
+017 JUMP+ M(010, DIREITA);
+
+0EF 00 00 00 00 13	# contador da transferencia do endereço 0x100 para 0x300
+0F0 00 00 00 01 00 	# endereço que corresponde à "vet[i]"
+0F1 00 00 00 00 01	# variavel 1
+0F2 00 00 00 00 00 	
+0F3 00 00 00 00 00
+0F4 00 00 00 00 12	# contador interno
+0F5 00 00 00 00 13 	# contador externo
+0F6 00 00 00 00 12 	# reset do contador interno
+0F7 00 00 00 01 00	# reset do endereço de vet[i]
+0F8 00 00 00 01 00	# endereço para o inicio vet[i]
+0F9 00 00 00 03 00	# endereço para o inicio 
+0FA 00 00 00 00 00	# aux
